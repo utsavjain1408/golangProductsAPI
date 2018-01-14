@@ -55,7 +55,7 @@ func getProducts(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 func getProduct(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		session := s.Copy()
-		defer s.Close()
+		defer session.Close()
 		db := session.DB("ProductCatelogue").C(COLLECTION)
 		w.Header().Set("Content-Type", "application/json")
 		params := mux.Vars(r) //Get params
