@@ -14,7 +14,7 @@ import (
 
 //Product model for a Product ...
 type Product struct {
-	ProductID   string `json:"id"`
+	ProductID   string `json:"pid"`
 	Name        string `json:"name"`
 	SKU         string `json:"SKU"`
 	Description string `json:"description"`
@@ -70,8 +70,8 @@ func getProduct(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 		var product Product
 		err := db.FindId(bson.ObjectIdHex(params["id"])).One(&product)
 		if err != nil {
-			log.Fatal(err)
-			json.NewEncoder(w).Encode(&Product{})
+			//log.Fatal(err)
+			json.NewEncoder(w).Encode("No Product Found")
 
 		}
 		json.NewEncoder(w).Encode(product)
@@ -123,7 +123,7 @@ func updateProduct(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) 
 		_ = json.NewDecoder(r.Body).Decode(&pro)
 		json.NewEncoder(w).Encode(pro)
 		db := session.DB("ProductCatelogue").C(COLLECTION)
-		err := db.Update(bson.M{"_id": params["id"]}, &pro)
+		err := db.UpdateId(bson.ObjectIdHex(params["id"]), &pro)
 		if err != nil {
 			log.Println("Error!!!!")
 		}
@@ -144,7 +144,7 @@ func deleteProduct(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) 
 		//}
 		//err := db.Remove(&pro)
 		db := session.DB("ProductCatelogue").C(COLLECTION)
-		err := db.Remove(params["id"])
+		err := db.RemoveId(bson.ObjectIdHex(params["id"]))
 		if err != nil {
 			log.Println("Error!!!!" + params["id"])
 		}
