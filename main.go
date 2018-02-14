@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//"Product model for a Product ..."
+//Product model for a Product ...
 type Product struct {
 	ProductID   string `json:"id"`
 	Name        string `json:"name"`
